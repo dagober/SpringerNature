@@ -1,0 +1,73 @@
+# https://raw.githubusercontent.com/elgalu/docker-selenium/master/docker-compose.yml
+# vi:set tabstop=2 shiftwidth=2 smarttab expandtab:
+
+version: '2'
+services:
+  phantomjs:
+    image: ${DOCKER_REPO}/alpine-phantomjs:latest
+    ports:
+      - "8643:8643"
+
+  hub:
+    image: elgalu/selenium
+    ports:
+      - ${SELENIUM_HUB_PORT}:${SELENIUM_HUB_PORT}
+      # We need a fixed port range to expose VNC
+      # due to a bug in Docker for Mac beta (1.12)
+      # https://forums.docker.com/t/docker-for-mac-beta-not-forwarding-ports/8658/6
+      - ${VNC_FROM_PORT}-${VNC_TO_PORT}:${VNC_FROM_PORT}-${VNC_TO_PORT}
+    environment:
+      - SELENIUM_HUB_PORT
+      - PICK_ALL_RANDMON_PORTS=true
+      - GRID=true
+      - CHROME=false
+      - FIREFOX=false
+      - RC_CHROME=false
+      - RC_FIREFOX=false
+
+  chrome:
+    image: elgalu/selenium
+    network_mode: "service:hub"
+    shm_size: 1g
+    mem_limit: 2g
+    memswap_limit: 4g
+    depends_on:
+      - hub
+    volumes:
+      - ./videos:/videos
+    environment:
+      - SELENIUM_HUB_PORT
+      - VNC_FROM_PORT
+      - VNC_TO_PORT
+      - SCREEN_WIDTH=1300
+      - SCREEN_HEIGHT=999
+      - PICK_ALL_RANDMON_PORTS=true
+      - VIDEO
+      - GRID=false
+      - CHROME=true
+      - FIREFOX=false
+      - RC_CHROME=false
+      - RC_FIREFOX=false
+
+  firefox:
+    image: elgalu/selenium
+    network_mode: "service:hub"
+    mem_limit: 2g
+    memswap_limit: 4g
+    depends_on:
+      - hub
+    volumes:
+          - ./videos:/videos
+    environment:
+      - SELENIUM_HUB_PORT
+      - VNC_FROM_PORT
+      - VNC_TO_PORT
+      - SCREEN_WIDTH=1300
+      - SCREEN_HEIGHT=999
+      - PICK_ALL_RANDMON_PORTS=true
+      - VIDEO
+      - GRID=false
+      - CHROME=false
+      - FIREFOX=true
+      - RC_CHROME=false
+      - RC_FIREFOX=false
