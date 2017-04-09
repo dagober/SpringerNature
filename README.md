@@ -19,6 +19,3 @@
 ```
     vendor/bin/codecept run -help
 ```
-
-## Install git hooks
-cp hooks/* .git/hooks/
