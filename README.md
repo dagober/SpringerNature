@@ -19,11 +19,6 @@
 ```
     vendor/bin/codecept run -help
 ```
-* create a new class test
-```
-    vendor/bincodecept generate:cept acceptance classname
-```
-
 
 ## Install git hooks
 cp hooks/* .git/hooks/
