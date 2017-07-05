@@ -1,5 +1,6 @@
 # https://raw.githubusercontent.com/elgalu/docker-selenium/master/docker-compose.yml
 # vi:set tabstop=2 shiftwidth=2 smarttab expandtab:
+#
 
 version: '2'
 services:
